@@ -1,36 +1,33 @@
 # video2gif
-Simple GUI to open videos, allowing basic video editing and save to gif file. 
-=======
-# Doccou
 
 A simple free and open source GUI to open videos, allowing basic video editing and save to gif file.
 
 ## Features
 
-- Open mp4 video:
+#### Open mp4 video:
+
 ![Demo: open mp4](gifs/open_mp4.gif)
-- Play the video
-- Edit the video, even while playing (resize, inside and outside cut, flip, rotate, undo and redo)
+#### Play and edit the video, even while playing (resize, inside and outside cut, flip, rotate, undo and redo)
 ![Demo: play and edit](gifs/play_edit.gif)
-- Save gif and png
+#### Save gif and png
 ![Demo: save gif](gifs/save_gif.gif)
 ![Demo: save png](gifs/save_png.gif)
 
 
 ## Dependences
 
-Python 3
-PySimpleGUI
-MoviePy
-pygifsicle
+- Python 3 (tested with version 3.6.9)
+- PySimpleGUI (tested with version 4.55.1)
+- MoviePy (tested with version 1.0.3)
+- pygifsicle (tested with version 1.0.5)
 
 ## Feature Done 
 
 ### v1.0.0
 
-* Open mp4 video:
+* Open mp4 video
 * Play the video
-* Edit the video, even while playing (resize, inside and outside cut, flip, rotate, undo and redo)
+* Edit the video (resize, inside and outside cut, flip, rotate, undo and redo)
 * Save gif and png
 
 ## Bug Reports & Feature Requests
