@@ -1,6 +1,6 @@
 # video2gif
 
-A simple free and open source GUI to open videos, allowing basic video editing and save to gif file.
+A simple free and open source GUI to open videos, allowing basic video editing and save to gif file. 
 
 ## Features
 
