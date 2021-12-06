@@ -33,7 +33,7 @@ transforms = [
     [sg.Button("Flip x"), sg.Button("Flip y"), sg.Button("Rotate 90"), sg.Button("Rotate -90")],
 # TODO: select a rectangle
 #   [sg.Text("Select retangle:"), sg.Button("Retangle", disabled=True)],
-    [sg.Button("Undo"), sg.Button("Redo")],
+    [sg.Button("Undo",disabled=True), sg.Button("Redo",disabled=True)],
 ]
 
 # For now will only show the name of the file that was chosen
@@ -140,9 +140,7 @@ class Gif:
         else: 
             transform = ('cut outside',start, end)
         self.apply_transform(transform)        
-        self.dur = self.clip.duration
         self.add_transform(transform)
-        self.play_range=(0,self.dur)
 
     def flip(self,axis = 'x'):
         transform = ('flip',axis)
@@ -186,12 +184,18 @@ class Gif:
             self.clip=self.fullclip.resize(height=t[1])
             
         elif t[0] == 'cut inside':
-            self.clip=self.clip.subclip(t[1], t[2])        
+            self.clip=self.clip.subclip(t[1], t[2]) 
+            self.dur = self.clip.duration
+            self.play_range=(0,self.dur)
+       
 
         elif t[0] == 'cut outside':
             clip1=self.clip.subclip(0, t[1])
             clip2=self.clip.subclip(t[2], self.clip.duration)
             self.clip=concatenate_videoclips([clip1,clip2], method='compose')
+            self.dur = self.clip.duration
+            self.play_range=(0,self.dur)
+       
 
     def apply_transform_list(self):        
         #clip=fullclip.copy()
@@ -259,10 +263,11 @@ while True:
 
     if event == "Exit" or event == sg.WIN_CLOSED:
         break
-
+        
     # Load video
     if event == "Load/Reload Video" and values["-VIDEO-SELECTED-"].endswith('.mp4'):
         playing=False
+        window['Play'].update('Play')
         file = values["-VIDEO-SELECTED-"]       
 
         try:
@@ -289,6 +294,7 @@ while True:
 
     elif event == "start_slider" and is_video_loaded: 
         playing=False
+        window['Play'].update('Play')
         gif.current_time=values['start_slider']
         gif.play_range=(gif.current_time,values['end_slider'])
         if gif.current_time >  values["end_slider"]:
@@ -298,6 +304,7 @@ while True:
 
     elif event == "end_slider" and is_video_loaded: 
         playing=False
+        window['Play'].update('Play')
         gif.current_time=values['end_slider']
         gif.play_range=(values['start_slider'],gif.current_time)
         if gif.current_time <  values["start_slider"]:
@@ -309,6 +316,7 @@ while True:
         window["-IMAGE-"].update(gif.display())         
         if playing:
             playing=False   
+            window['Play'].update('Play')
     
     elif event == 'Cut inside' and is_video_loaded:
         gif.cut(values['start_slider'],values['end_slider'], inside=True)        
@@ -352,7 +360,7 @@ while True:
 
         
 
-    elif event == 'Play':  
+    elif event == 'Play' and is_video_loaded:
         if playing:
             window['Play'].update('Play')
             playing=False
@@ -363,12 +371,17 @@ while True:
             play_start_time=values['trackbar']
             paused=False
     
-    elif event == 'Stop':
+    elif event == 'Stop' and is_video_loaded:
         window['Play'].update('Play')
         playing=False
         window["-IMAGE-"].update(gif.display())
         window["trackbar"].update(0)
 
+#print(event,values)
+    if not event=='__TIMEOUT__' and is_video_loaded:
+        window['Undo'].update(disabled = (gif.transform_index == 0) ) 
+        window['Redo'].update(disabled = (gif.transform_index >= len(gif.transforms)))
+    
     ''' TODO: control Z
         elif (event == "CTRL-B" and not ctrl_z_on):
             ctrl_z_on == True
@@ -394,6 +407,7 @@ while True:
             gif.current_time=trackbar_time
         else:
             playing=False
+            window['Play'].update('Play')
     
     #window['Pause'].update(disabled=paused)
     #print(transforms)
