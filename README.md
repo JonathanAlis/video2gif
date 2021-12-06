@@ -23,6 +23,10 @@ A simple free and open source GUI to open videos, allowing basic video editing a
 
 ## Feature Done 
 
+### v1.1.0
+
+* Change de code to OO
+
 ### v1.0.0
 
 * Open mp4 video
